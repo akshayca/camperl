@@ -1,0 +1,52 @@
+
+body{
+ 
+background-color: rgba(255,255,255,1);
+background: @include filter-gradient(#ffffff, #ededed, vertical);
+background: @include background-image(linear-gradient(top, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%));;
+}
+
+.prof-pic{
+	width: 40px;
+  padding: 2px;
+  margin: 10px;
+  
+  border: 2px solid #381F0B;
+  max-height: 40px;
+  margin-right: 4px;
+	
+}
+
+#camper-name{
+   text-align:center; 
+    vertical-align:middle;
+}
+.data-table{
+  padding: 5px;
+}
+
+#app{
+ 
+	margin: 2.5% auto auto auto;
+	
+
+}
+footer{
+  text-align:center;
+  font-family: 'Lato', sans-serif;
+}
+.data-table{
+  
+  font-family: 'Lato', sans-serif;
+  
+}
+#header{
+   font-family: 'Monoton', cursive;
+   color:gold;
+  text-shadow : 2px 2px #edeaea;
+  
+}
+a{
+  text-decoration: none;
+  cursor: pointer;
+}

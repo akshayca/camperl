@@ -1,0 +1,154 @@
+var xmlhttp = new XMLHttpRequest();
+var recentUrl = 'https://fcctop100.herokuapp.com/api/fccusers/top/recent';
+var allTimeUrl = 'https://fcctop100.herokuapp.com/api/fccusers/top/alltime';
+xmlhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var myArr = JSON.parse(this.responseText);
+    recentCallback(myArr);
+  }
+};
+xmlhttp.open("GET", recentUrl, true);
+xmlhttp.send();
+
+var xhr = new XMLHttpRequest();
+
+xhr.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var myArr = JSON.parse(this.responseText);
+    alltimeCallback(myArr);
+  }
+};
+xhr.open("GET", allTimeUrl, true);
+xhr.send();
+var recentObj;
+var alltimeObj;
+var count = 0;
+
+function recentCallback(myArr) {
+  recentObj = myArr;
+  count++;
+  if (count >= 2) {
+    myApp();
+  }
+}
+
+function alltimeCallback(myArr) {
+  count++;
+  alltimeObj = myArr;
+  if (count >= 2) {
+    myApp();
+  }
+}
+
+function myApp() {
+  
+  var Header = React.createClass({
+    render: function() {
+      return (
+        <div id = "header">
+    <h1 className = "text-center">FreeCodeCamp Leaderboard</h1>
+  </div>
+      );
+    }
+  });
+  
+   
+
+  var Camper = React.createClass({
+    
+    render: function() {
+      
+      return (
+        <tr className = "active text-center" id = "myList" >
+          <td className = "info index">{this.props.indexProp}</td>
+          <td className = "info pic"><img className = "img img-responsive img-circle prof-pic" src = {this.props.imageProp} /></td>
+          <td className = "info name">
+            <a href = {"https://www.freecodecamp.com/" + this.props.nameProp} target = "_blank">
+                  
+                   <span id = 'camper-name'> {this.props.nameProp}
+              </span>
+            </a>
+          </td>
+          
+          <td className = "info recent"> {this.props.recentProp} </td>
+          <td className = "info all-time">{this.props.alltimeProp}</td>
+        </tr>
+      );
+    }
+  });
+            
+            
+  
+  var Leaderboard = React.createClass({
+    getInitialState: function() {
+      return {
+        recent: recentObj,
+        alltime: alltimeObj,
+        defaultDisplay: alltimeObj
+      };
+    },
+    updateState: function(newState) {
+      this.setState({
+        defaultDisplay: newState
+      });
+      //console.log(this.state.text);
+    },
+    switchToAlltime: function() {
+      this.updateState(this.state.alltime);
+    },
+    switchToRecent: function() {
+      this.updateState(this.state.recent);
+    },
+    render: function() {
+      var rows = [];
+      for (var i = 0; i < this.state.defaultDisplay.length; i++) {
+        var display = this.state.defaultDisplay[i];
+        
+        rows.push(<Camper keyProp = {i + 1}
+                  indexProp = {i + 1}
+                  imageProp = {display.img}
+                  nameProp = {display.username}
+                  recentProp = {display.recent}
+                  alltimeProp = {display.alltime}
+                  />);
+      }
+      
+
+      return (
+
+        <div className="table-responsive text-center data-table">
+      <table className="table table-condensed table-hover table-bordered table-striped data-table">
+        <thead>
+          <tr className = 'active' key = "header">
+        <td className = "info index">#</td>
+            <td className = "info pic"></td>
+        <td className = "info name">Camper Name</td>
+        <td className = "info recent"><a  onClick = {this.switchToRecent}>Past 30 days</a>
+          </td>
+        <td className = "info all-time"><a  onClick = {this.switchToAlltime}>All Time</a></td>
+        
+        </tr>
+        </thead>
+  {rows} 
+    </table>
+    </div>
+      );
+
+    }
+
+      });
+  
+               
+  var AppClass = React.createClass({
+              render: function () {
+                return(
+                  <div>
+                    <Header /> 
+                  <Leaderboard />
+                  </div>
+    );
+              }
+            });        
+
+  ReactDOM.render(<AppClass />, document.getElementById('app'));
+}
